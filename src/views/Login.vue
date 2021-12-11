@@ -42,7 +42,16 @@ export default ({
         console.log(response);
         return response.json();
       }).then((data) => {
-        alert(data.response)
+        if (data.response == "Valid"){
+          this.$router.push({
+                path: '/welcome'
+            })
+        }
+        else if (data.response == "Not Valid"){
+          this.$router.push({
+                path: '/'
+            })
+        }
       })
     }
   },
