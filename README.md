@@ -16,6 +16,8 @@ python3 -m venv venv
 .\venv\Scripts\activate
 pip install -r requirements.txt
 ```
+<hr>
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
