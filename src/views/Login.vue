@@ -1,41 +1,62 @@
 <template>
   <div class="login">
-  <form>
-  <div class="mb-6">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-    <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-  </div>
-  <div class="mb-6">
-    <label for="exampleInputPassword1" class="form-label">Password</label>
-    <input type="password" class="form-control" id="exampleInputPassword1">
-  </div>
-  <div class="mb-6">
-          <router-link to="/welcome"><button class="btn btn-primary" type="submit">Login</button>
-</router-link>
-  </div>
-</form>
+    <div id="form">
+      <div class="mb-6">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" v-model="credentials.username">
+      </div>
+      <div class="mb-6">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" v-model="credentials.password">
+      </div>
+      <div class="mb-6">
+        <button class="btn btn-primary" @click="checkLogin">Login</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { defineComponent } from '@vue/composition-api'
-
-export default defineComponent({
-  setup() {
-    
+export default ({
+  name: "Login",
+  data() {  
+    return {
+      credentials : {
+        username: "",
+        password: ""
+      }
+    }
+  },
+  methods: {
+    checkLogin() {
+      let options = {
+        method : "POST",
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(this.credentials)
+      }
+      console.log(this.credentials);
+      fetch("http://localhost:5000/login", options)
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      }).then((data) => {
+        alert(data.response)
+      })
+    }
   },
 })
 </script>
 
 <style scoped>
 .login {
-display: grid;
-place-items: center;
-min-height: 100vh;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
 }
-form{
-padding: 20px;
-box-shadow: 5px 5px 5px 5px #888888;
+#form{
+  padding: 20px;
+  box-shadow: 5px 5px 5px 5px #888888;
 }
 </style>
