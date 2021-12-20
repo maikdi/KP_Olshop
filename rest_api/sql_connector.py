@@ -17,5 +17,13 @@ class DB:
         WHERE username = %s AND password = %s;
         """
         self.cursor.execute(select_statement, (username,password,))
-        student = self.cursor.fetchall()
-        return student
+        user = self.cursor.fetchall()
+        return user
+    
+    def get_all_products(self):
+        select_statement = """
+        SELECT id, name, price FROM product;
+        """
+        self.cursor.execute(select_statement)
+        all_products = self.cursor.fetchall()
+        return all_products

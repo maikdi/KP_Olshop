@@ -1,39 +1,42 @@
 <template>
-<div class="welcome">
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-<div class="container-fluid">
-<a class="navbar-brand" href="#">Navbar</a>
-<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Features</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown link
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
-      </ul>
+  <div class="container-fluid">
+    <Navbar></Navbar>
+    <div class="row row-cols-4 row-cols-md-4 g-4">
+      <div class="col" v-for="product in products" :key="product[0]">
+        <div class="card" style="width: 18rem">
+          <img src="" class="card-img-top" alt="" />
+          <div class="card-body">
+            <p class="card-title">{{ product[1] }}</p>
+            <p class="card-text">Harga: {{ product[2] }}</p>
+            <a href="#" class="btn btn-primary">Details</a>
+            <a href="#" class="btn btn-success">Add to cart</a>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-<form class="d-flex">
-<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-<button class="btn btn-outline-light" type="submit">Search</button>
-</form>
-</nav>
-</div>
+  </div>
 </template>
+
+<script>
+export default {
+  name: "Login",
+  data() {
+    return {
+      products: "",
+      valid: true,
+    };
+  },
+  created() {
+    fetch("http://localhost:5000/get_dashboard")
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        this.products = data.data;
+        console.log(data);
+      });
+  },
+  methods: {},
+};
+</script>
