@@ -4,7 +4,7 @@
     <div class="row row-cols-4 row-cols-md-4 g-4">
       <div class="col" v-for="product in products" :key="product[0]">
         <div class="card" style="width: 18rem; margin-top:10px">
-          <img src="" class="card-img-top" alt="" />
+          <img :src="require('../assets/' + product[3])" class="card-img-top" />
           <div class="card-body">
             <p class="card-title"><b>{{ product[1] }}</b></p>
             <p class="card-text">

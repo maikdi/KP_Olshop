@@ -22,7 +22,7 @@ class DB:
     
     def get_all_products(self):
         select_statement = """
-        SELECT id, name, price FROM product;
+        SELECT id, name, price, path FROM product;
         """
         self.cursor.execute(select_statement)
         all_products = self.cursor.fetchall()
