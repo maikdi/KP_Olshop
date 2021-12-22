@@ -82,7 +82,7 @@ export default {
           if (data.response == "Valid") {
             this.$session.set("user", this.credentials.username);
             this.$router.push({
-              path: "/welcome",
+              path: "/dashboard",
             });
           } else if (data.response == "Not Valid") {
             this.valid = false;
