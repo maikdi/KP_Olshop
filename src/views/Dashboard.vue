@@ -62,7 +62,7 @@
       </div>
     </div>
     <!-- END MODAL -->
-    <Navbar></Navbar>
+    <Navbar class="row"></Navbar>
     <div class="row row-cols-4 row-cols-md-4 g-4">
       <div class="col" v-for="product in products" :key="product[0]">
         <div class="card" style="width: 18rem; margin-top: 10px">
