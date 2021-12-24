@@ -42,9 +42,7 @@
                   Deskripsi:
                 </p>
                 <br>
-                <p>
-                  {{details[4]}}
-                </p>
+                <p id="description"></p>
               </div>
             </div>
           </div>
@@ -123,6 +121,7 @@ export default {
     toggleModal(index) {
       this.details = this.$store.getters.productDetails(index);
       this.showModal = true
+      document.getElementById('description').innerHTML = this.details[4]
       console.log(this.details);
     }
   },
