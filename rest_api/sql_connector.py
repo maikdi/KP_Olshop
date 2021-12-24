@@ -22,8 +22,8 @@ class DB:
     
     def get_all_products(self):
         select_statement = """
-        SELECT id, name, price, path FROM product;
+        SELECT * FROM product;
         """
         self.cursor.execute(select_statement)
         all_products = self.cursor.fetchall()
-        return all_products
+        return all_products #(id, name, price, kategori, deskripsi, path)
