@@ -5,11 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    products: []
+    details: "",
+    allProducts: []
   },
   getters: {
     productDetails: (state) => (index) => { 
-        return state.products[index];
+        return state.allProducts[index];
     },
     allProducts(state) {
       return state.products
@@ -17,22 +18,11 @@ export default new Vuex.Store({
   },
   mutations: {
     setProducts(state, products) {
-      state.products = products
+      state.allProducts = products
     }
   },
   actions: {
-    init(context) {
-          fetch("http://localhost:5000/get_dashboard")
-          .then((response) => {
-            // console.log(response);
-            return response.json();
-          })
-          .then((data) => {
-            console.log(data);
-            context.commit('setProducts', data.data)
-            // console.log(data);
-          });
-      },
+    
   },
   modules: {
   }

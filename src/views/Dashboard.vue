@@ -1,12 +1,13 @@
 <template>
   <div class="container-fluid">
     <!-- Modal -->
-    <!-- <div
+    <div
       class="modal fade"
       id="exampleModal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
+      v-if="showModal" @close="showModal = false"
     >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -22,7 +23,7 @@
           <div class="modal-body">
             <div class="row">
               <div class="col">
-                <img :src="require('../assets/' + product[5])" alt="" style="width:240px;">
+                <img :src="require('../assets/' + details[5])" alt="" style="width:240px;">
               </div>
               <div class="col">
                 <b>{{ details[1] }}</b>
@@ -36,13 +37,13 @@
                   }}
                 </p>
                 <br>
-                <p>Kategori: {{product[3]}}</p>
+                <p>Kategori: {{details[3]}}</p>
                 <p>
                   Deskripsi:
                 </p>
                 <br>
                 <p>
-                  {{product[4]}}
+                  {{details[4]}}
                 </p>
               </div>
             </div>
@@ -59,7 +60,7 @@
           </div>
         </div>
       </div>
-    </div> -->
+    </div>
     <!-- END MODAL -->
     <Navbar></Navbar>
     <div class="row row-cols-4 row-cols-md-4 g-4">
@@ -101,23 +102,27 @@ export default {
   data() {
     return {
       products: "",
-      details: ""
+      details: "",
+      showModal: false
     };
   },
   created() {
     fetch("http://localhost:5000/get_dashboard")
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         return response.json();
       })
       .then((data) => {
         this.products = data.data;
-        console.log(data);
+        this.$store.commit('setProducts', data.data)
+        // console.log(data);
+        this.toggleModal(0);
       });
   },
   methods: {
     toggleModal(index) {
       this.details = this.$store.getters.productDetails(index);
+      this.showModal = true
       console.log(this.details);
     }
   },
