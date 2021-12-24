@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div>
     <Navbar></Navbar>
     <div class="row row-cols-4 row-cols-md-4 g-4">
       <div class="col" v-for="product in products" :key="product[0]">
