@@ -11,8 +11,10 @@
         />
       </symbol>
     </svg>
-    <div id="form">
-      <div v-if="valid == false" class="row">
+    <div class="card container pb-3" style="width: 500px">
+    <h3 class="card-header text-center">Login</h3>
+    <div id="card-body">
+      <div v-if="valid==false" class="row">
         <div class="alert alert-danger d-flex align-items-center" role="alert">
           <svg
             class="bi flex-shrink-0 me-2"
@@ -26,7 +28,8 @@
           <div>Username/Password tidak ditemukan</div>
         </div>
       </div>
-      <div class="mb-6">
+
+      <div class="mb-6 mt-2">
         <label for="username" class="form-label">Username</label>
         <input
           type="text"
@@ -35,7 +38,8 @@
           v-model="credentials.username"
         />
       </div>
-      <div class="mb-6">
+
+      <div class="mb-6 mt-2">
         <label for="password" class="form-label">Password</label>
         <input
           type="password"
@@ -44,9 +48,18 @@
           v-model="credentials.password"
         />
       </div>
-      <div class="mb-6">
+
+      <div class="mb-6 mt-4 text-center">
         <button class="btn btn-primary" @click="checkLogin">Login</button>
       </div>
+
+      <div class="d-flex justify-content-center mt-3">
+        <div class="small d-inline text-center" style="margin-right: 3px">Don't have an account?</div>
+        <router-link to='/sign-up' class="small d-inline text-center text-decoration-none">
+          <b>Sign Up</b>
+        </router-link>
+      </div>
+    </div>
     </div>
   </div>
 </template>
@@ -74,23 +87,28 @@ export default {
       };
       console.log(this.credentials);
       fetch("http://localhost:5000/login", options)
-        .then((response) => {
-          console.log(response);
-          return response.json();
-        })
-        .then((data) => {
-          if (data.response == "Valid") {
-            this.$session.set("user", this.credentials.username);
-            this.$router.push({
-              path: "/dashboard",
-            });
-          } else if (data.response == "Not Valid") {
-            this.valid = false;
-          }
-        });
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      }).then((data) => {
+        if (data.response == "Valid"){
+          this.$router.push({
+                path: '/welcome'
+            })
+        }
+        else if (data.response == "Not Valid"){
+          this.valid = false
+        } 
+      })
     },
-  },
-};
+    goToSignUp() {
+      this.$router.push({
+        path: '/sign-up'
+      })
+    }
+  }
+})
+
 </script>
 
 <style scoped>
@@ -98,9 +116,5 @@ export default {
   display: grid;
   place-items: center;
   min-height: 100vh;
-}
-#form {
-  padding: 20px;
-  box-shadow: 5px 5px 5px 5px #888888;
 }
 </style>
