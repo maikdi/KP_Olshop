@@ -55,5 +55,9 @@ def sign_up():
 		result = {'response': 'required field'}
 	return jsonify(result)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+@app.route("/get_dashboard", methods=["GET"])
+def get_all_products():
+	all_products = shop_database.get_all_products() #List of tuple e.g: [('id', 'name', 'price), ('id2', 'name2', 'price2'), ...]
+	data = {"data" : all_products}
+	return jsonify(data)
+app.run()

@@ -31,4 +31,12 @@ class DB:
         user = self.cursor.fetchall()
         print(user)
         return user
+    
+    def get_all_products(self):
+        select_statement = """
+        SELECT * FROM product;
+        """
+        self.cursor.execute(select_statement)
+        all_products = self.cursor.fetchall()
+        return all_products #(id, name, price, kategori, deskripsi, path)
 
