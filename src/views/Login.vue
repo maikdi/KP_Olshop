@@ -100,14 +100,9 @@ export default {
           this.valid = false
         } 
       })
-    },
-    goToSignUp() {
-      this.$router.push({
-        path: '/sign-up'
-      })
     }
   }
-})
+}
 
 </script>
 
