@@ -65,4 +65,8 @@ def get_all_products():
 	data = {"data" : all_products}
 	return jsonify(data)
 
+@app.route('/admin', methods=["POST"])
+def add_product():
+	pass
+
 app.run()

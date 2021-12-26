@@ -44,3 +44,8 @@ class DB:
         insert_statement = f"INSERT INTO cart (username, product_name, price, quantity) VALUES ('{username}', '{product_name}', '{price}' ,'{quantity}')"
         self.cursor.execute(insert_statement)
         self.conn.commit()
+
+    def add_product(self, name, price, category, description, path):
+        insert_statement = f"INSERT INTO product (name, price, kategori, Deskripsi, path) VALUES ('{name}', '{price}', '{category}' ,'{description}', '{path}')"
+        self.cursor.execute(insert_statement)
+        self.conn.commit()
