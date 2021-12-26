@@ -93,7 +93,7 @@ export default {
       }).then((data) => {
         if (data.response == "Valid"){
           this.$router.push({
-                path: '/dashboard'
+                path: '/'
             })
         }
         else if (data.response == "Not Valid"){

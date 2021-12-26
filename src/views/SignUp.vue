@@ -72,7 +72,7 @@
 
           <div class="d-flex justify-content-center mt-3">
             <div class="small d-inline text-center" style="margin-right: 3px">Have an account?</div>
-            <router-link to='/' class="small d-inline text-center text-decoration-none">
+            <router-link to='/login' class="small d-inline text-center text-decoration-none">
               <b>Sign In</b>
             </router-link>
           </div>

@@ -86,7 +86,7 @@
               v-on:click="toggleModal(product[0] - 1)"
               >Details</a 
             >
-            <a href="#" class="btn btn-success">Add to cart</a>
+            <a href="#" class="btn btn-success" @click="addToCart(product)">Add to cart</a>
           </div>
         </div>
       </div>
@@ -123,7 +123,11 @@ export default {
       this.showModal = true
       document.getElementById('description').innerHTML = this.details[4]
       console.log(this.details);
+    },
+    addToCart(product) {
+      console.log(product);
+      this.$store.commit('addProductToCart', product)
     }
-  },
+  }
 };
 </script>
