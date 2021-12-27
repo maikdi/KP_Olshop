@@ -92,6 +92,7 @@ export default {
         return response.json();
       }).then((data) => {
         if (data.response == "Valid"){
+          this.$session.set("user",this.credentials.username)
           this.$router.push({
                 path: '/'
             })

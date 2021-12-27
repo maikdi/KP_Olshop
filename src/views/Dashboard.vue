@@ -1,15 +1,16 @@
 <template>
   <div class="container-fluid">
-    <!-- Modal -->
+    <!-- Start Details Modal -->
     <div
       class="modal fade"
       id="exampleModal"
       tabindex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
-      v-if="showModal" @close="showModal = false"
+      v-if="showModal"
+      @close="showModal = false"
     >
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Detail Product</h5>
@@ -23,7 +24,11 @@
           <div class="modal-body">
             <div class="row">
               <div class="col">
-                <img :src="require('../assets/' + details[5])" alt="" style="width:240px;">
+                <img
+                  :src="require('../assets/' + details[5])"
+                  alt=""
+                  style="width: 240px"
+                />
               </div>
               <div class="col">
                 <b>{{ details[1] }}</b>
@@ -36,12 +41,10 @@
                     }).format(details[2])
                   }}
                 </p>
-                <br>
-                <p>Kategori: {{details[3]}}</p>
-                <p>
-                  Deskripsi:
-                </p>
-                <br>
+                <br />
+                <p>Kategori: {{ details[3] }}</p>
+                <p>Deskripsi:</p>
+                <br />
                 <p id="description"></p>
               </div>
             </div>
@@ -54,19 +57,79 @@
             >
               Close
             </button>
-            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Add to cart</button>
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-dismiss="modal"
+            >
+              Add to cart
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <!-- END MODAL -->
+    <!-- End Details MODAL -->
+    <!-- Start Cart Modal -->
+    <div
+      class="modal fade"
+      id="cartModal"
+      tabindex="-1"
+      aria-labelledby="cartSuccess"
+      aria-hidden="true"
+      v-if="showModal"
+      @close="showModal = false"
+    >
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cartSuccess">
+              Produk berhasil masuk keranjang!
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">Produk berhasil masuk keranjang! :D</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary me-2 col-auto"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-dismiss="modal"
+            >
+              Lihat Keranjang
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Cart Modal -->
     <Navbar class="row"></Navbar>
     <div class="row row-cols-4 row-cols-md-4 g-4">
       <div class="col" v-for="product in products" :key="product[0]">
-        <div class="card" style="width: 18rem; margin-top: 10px">
-          <img :src="require('../assets/' + product[5])" class="card-img-top" />
+        <div class="card border-dark mb-3 h-80">
+          <img :src="require('../assets/' + product[5])" class="card-img-top" style="height:300px"/>
           <div class="card-body">
-            <p class="card-title">
+            <p
+              class="card-title"
+              style="
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                line-clamp: 2;
+                -webkit-box-orient: vertical;
+              "
+            >
               <b>{{ product[1] }}</b>
             </p>
             <p class="card-text">
@@ -80,13 +143,20 @@
             </p>
             <a
               href="#"
-              class="btn btn-primary"
+              class="btn btn-primary me-2 col-auto"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
               v-on:click="toggleModal(product[0] - 1)"
-              >Details</a 
+              >Details</a
             >
-            <a href="#" class="btn btn-success" @click="addToCart(product)">Add to cart</a>
+            <a
+              href="#"
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#cartModal"
+              @click="addToCart(product)"
+              >Add to cart</a
+            >
           </div>
         </div>
       </div>
@@ -101,7 +171,7 @@ export default {
     return {
       products: "",
       details: "",
-      showModal: false
+      showModal: false,
     };
   },
   created() {
@@ -112,7 +182,7 @@ export default {
       })
       .then((data) => {
         this.products = data.data;
-        this.$store.commit('setProducts', data.data)
+        this.$store.commit("setProducts", data.data);
         // console.log(data);
         this.toggleModal(0);
       });
@@ -120,14 +190,23 @@ export default {
   methods: {
     toggleModal(index) {
       this.details = this.$store.getters.productDetails(index);
-      this.showModal = true
-      document.getElementById('description').innerHTML = this.details[4]
+      this.showModal = true;
+      document.getElementById("description").innerHTML = this.details[4];
       console.log(this.details);
     },
     addToCart(product) {
       console.log(product);
-      this.$store.commit('addProductToCart', product)
-    }
-  }
+      this.$store.commit("addProductToCart", product);
+    },
+  },
 };
 </script>
+
+<style scoped>
+.card {
+  width: 18rem;
+  margin-top: 10px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px 0 var(--N700, rgba(49, 53, 59, 0.12));
+}
+</style>

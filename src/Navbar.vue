@@ -1,5 +1,5 @@
 <template>
-  <div class="welcome">
+  <div class="justify-content-center">
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <!-- DIV FOR LOGO AND TABS -->
       <div class="container-fluid">
@@ -15,11 +15,6 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#/">Home</a>
-          </li>
-        </ul>
       </div>
       <!-- DIV FOR SEARCH BAR ONLY -->
       <div class="container-fluid">
@@ -34,15 +29,18 @@
         </form>
       </div>
       <!-- DIV FOR USER SECTION -->
-      <div class="container-fluid">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page">
-              {{this.username}}
-            </a>
-          </li>
-        </ul>
+      <div class="container-fluid"></div>
+      <div class="d-flex" v-if="loginStatus">
+          <a class="btn btn-outline-light me-2 col-auto" aria-current="page">
+            {{ this.username }}
+          </a>
+          <a class="btn btn-outline-light" aria-current="page"> Logout </a>
       </div>
+      <div v-else>
+          <a class="btn btn-outline-light" aria-current="page" @click="toLogin">
+            Login
+          </a>
+        </div>
     </nav>
   </div>
 </template>
@@ -52,14 +50,30 @@ export default {
   name: "Welcome",
   data() {
     return {
-      username: this.$session.get("user"),
+      loginStatus: false,
+      username: "",
     };
+  },
+  created() {
+    let status = this.$session.has("user");
+    // console.log(status);
+    if (status) {
+      this.loginStatus = true;
+      this.username = this.$session.get("user");
+    } else {
+      this.loginStatus = false;
+    }
+  },
+  methods: {
+    toLogin: function () {
+      this.$router.push({
+        path: "/login",
+      });
+    },
+    logout: function() {
+
+    }
   },
 };
 </script>
 
-<style scoped>
-nav {
-  justify-content: space-between;
-}
-</style>
