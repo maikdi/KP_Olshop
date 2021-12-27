@@ -6,6 +6,10 @@ app = Flask(__name__)
 CORS(app)
 shop_database = DB()
 
+@app.route("/", methods=["POST"])
+def add_to_cart():
+	pass
+
 @app.route("/login", methods=["POST"])
 def login():
 	json_data = request.get_json()
@@ -60,4 +64,9 @@ def get_all_products():
 	all_products = shop_database.get_all_products() #List of tuple e.g: [('id', 'name', 'price), ('id2', 'name2', 'price2'), ...]
 	data = {"data" : all_products}
 	return jsonify(data)
+
+@app.route('/admin', methods=["POST"])
+def add_product():
+	pass
+
 app.run(debug=True)

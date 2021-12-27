@@ -4,12 +4,13 @@ import Login from '../views/Login.vue'
 import SignUp from '../views/SignUp.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Admin from '../views/Admin.vue'
-import Sale from '../views/Sale-Reporting.vue';
+import Sale from '../views/Sale-Reporting.vue'
+import Cart from '../views/Cart.vue'
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'Login',
     component: Login
   },
@@ -19,7 +20,7 @@ const routes = [
     component: SignUp
   },
   {
-    path: '/dashboard',
+    path: '/',
     name: 'Dashboard',
     component: Dashboard
   },
@@ -32,6 +33,11 @@ const routes = [
     path: '/sale-report',
     name: "Sale Reporting",
     component: Sale
+  },
+  {
+    path: '/cart',
+    name: "Cart",
+    component: Cart
   }
 ]
 

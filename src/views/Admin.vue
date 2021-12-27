@@ -50,6 +50,22 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "Administration",
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    addProduct() {
+
+    }
+  }
+}
+</script>
+
 <style scoped>
 /* * {
 	padding: 0;
