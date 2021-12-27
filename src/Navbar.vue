@@ -34,7 +34,7 @@
           <a class="btn btn-outline-light me-2 col-auto" aria-current="page">
             {{ this.username }}
           </a>
-          <a class="btn btn-outline-light" aria-current="page"> Logout </a>
+          <a class="btn btn-outline-light" aria-current="page" @click="logout"> Logout </a>
       </div>
       <div v-else>
           <a class="btn btn-outline-light" aria-current="page" @click="toLogin">
@@ -71,7 +71,8 @@ export default {
       });
     },
     logout: function() {
-
+      this.$session.clear()
+      this.$router.go(0)
     }
   },
 };
