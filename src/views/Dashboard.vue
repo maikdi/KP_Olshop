@@ -57,13 +57,6 @@
             >
               Close
             </button>
-            <button
-              type="button"
-              class="btn btn-success"
-              data-bs-dismiss="modal"
-            >
-              Add to cart
-            </button>
           </div>
         </div>
       </div>
@@ -101,13 +94,6 @@
             >
               Close
             </button>
-            <button
-              type="button"
-              class="btn btn-success"
-              data-bs-dismiss="modal"
-            >
-              Lihat Keranjang
-            </button>
           </div>
         </div>
       </div>
@@ -117,7 +103,11 @@
     <div class="row row-cols-4 row-cols-md-4 g-4">
       <div class="col" v-for="product in products" :key="product[0]">
         <div class="card border-dark mb-3 h-80">
-          <img :src="require('../assets/' + product[5])" class="card-img-top" style="height:300px"/>
+          <img
+            :src="require('../assets/' + product[5])"
+            class="card-img-top"
+            style="height: 300px"
+          />
           <div class="card-body">
             <p
               class="card-title"
@@ -142,24 +132,24 @@
               }}
             </p>
           </div>
-            <div class="card-footer">
-              <a
+          <div class="card-footer">
+            <a
               href="#"
               class="btn btn-primary me-5"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
-              v-on:click="toggleModal(product[0] - 1)"
+              v-on:click="[toggleModal(product[0] - 1), showDetails=true]"
               >Details</a
             >
             <a
-              href="#"
+              href="#/cart"
               class="btn btn-success"
               data-bs-toggle="modal"
               data-bs-target="#cartModal"
               @click="addToCart(product)"
               >Add to cart</a
             >
-            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -174,6 +164,7 @@ export default {
       products: "",
       details: "",
       showModal: false,
+      showDetails: false
     };
   },
   created() {
@@ -194,11 +185,36 @@ export default {
       this.details = this.$store.getters.productDetails(index);
       this.showModal = true;
       document.getElementById("description").innerHTML = this.details[4];
-      console.log(this.details);
     },
     addToCart(product) {
-      console.log(product);
-      this.$store.commit("addProductToCart", product);
+      this.$store.commit("addCart", product);
+      console.log(this.$store.getters.getCart);
+    },
+    goToCart() {
+      this.$router.push({
+        path: "/cart",
+      });
+    },
+    createInvoice: function() {
+      let data = {
+        cart : this.$store.getters.getCart,
+        user : this.username
+        }
+      let options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+      fetch("http://localhost:5000/add-cart", options)
+      .then((response) => {
+        return response
+      }).then((data)=> {
+        console.log(data);
+        this.$store.commit.clearCart
+        return data
+      })  
     },
   },
 };

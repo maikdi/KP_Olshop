@@ -6,9 +6,9 @@ app = Flask(__name__)
 CORS(app)
 shop_database = DB()
 
-@app.route("/", methods=["POST"])
-def add_to_cart():
-	pass
+# @app.route("/", methods=["POST"])
+# def add_to_cart():
+# 	pass
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -63,6 +63,75 @@ def sign_up():
 def get_all_products():
 	all_products = shop_database.get_all_products() #List of tuple e.g: [('id', 'name', 'price), ('id2', 'name2', 'price2'), ...]
 	data = {"data" : all_products}
+	return jsonify(data)
+
+@app.route("/add-cart", methods=["PUT"])
+def add_to_cart():
+	json_data = request.get_json()
+	data = json_data['cart']
+	user = json_data['user']
+	user = shop_database.find_username(user)[0]
+	user_id = user[0]
+	invoice_id = user[1] + "_" + str(user[-1])
+	for items in data:
+		shop_database.add_invoice(invoice_id, user_id, items[0])
+	response = {
+			"response" : "Succesfull"
+		}
+	return jsonify(response)
+@app.route("/get-cart", methods=["POST"])
+def get_cart():
+	json_data = request.get_json()
+	user = json_data['user']
+	user = shop_database.find_username(user)[0]
+	invoice_id = user[1] + "_" + str(user[-1])
+	data = {"data" : shop_database.get_current_user_invoice(invoice_id)}
+	return jsonify(data)
+
+@app.route("/cancel-item", methods=["POST"])
+def cancel_item():
+	json_data = request.get_json()
+	user = json_data['user']
+	product_id = json_data['product_id']
+	user = shop_database.find_username(user)[0]
+	invoice_id = user[1] + "_" + str(user[-1])
+	shop_database.delete_item(invoice_id, product_id)
+	data = {"Response" : "OK"}
+	return jsonify(data)
+
+@app.route("/minus-quantity", methods=["PUT"])
+def minus_quantity():
+	json_data = request.get_json()
+	user = json_data['user']
+	product_id = json_data['product_id']
+	user = shop_database.find_username(user)[0]
+	invoice_id = user[1] + "_" + str(user[-1])
+	shop_database.minus_quantity(invoice_id, product_id)
+	data = {"Response" : "OK"}
+	return jsonify(data)
+
+@app.route("/plus-quantity", methods=["PUT"])
+def plus_quantity():
+	json_data = request.get_json()
+	user = json_data['user']
+	product_id = json_data['product_id']
+	user = shop_database.find_username(user)[0]
+	invoice_id = user[1] + "_" + str(user[-1])
+	shop_database.plus_quantity(invoice_id, product_id)
+	data = {"Response" : "OK"}
+	return jsonify(data)
+
+@app.route("/checkout", methods=["POST"])
+def checkout():
+	json_data = request.get_json()
+	user = json_data['user']
+	total = json_data['total']
+	date = json_data['date']
+	user = shop_database.find_username(user)[0]
+	invoice_id = user[1] + "_" + str(user[-1])
+	shop_database.add_sales(invoice_id, total, date)
+	shop_database.increase_user_invoice_id(user[0])
+	data = {"Response" : "OK"}
 	return jsonify(data)
 
 @app.route('/admin', methods=["POST"])
