@@ -16,8 +16,11 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#/" @click="goHome">Home</a>
+        </li>
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Keranjang</a>
+          <a class="nav-link active" aria-current="page" href="#/cart" @click="createInvoice">Keranjang</a>
         </li>
         </ul>
       </div>
@@ -78,6 +81,37 @@ export default {
     logout: function() {
       this.$session.clear()
       this.$router.go(0)
+    },
+    createInvoice: function() {
+      let data = {
+        cart : this.$store.getters.getCart,
+        user : this.username
+        }
+      let options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+      fetch("http://localhost:5000/add-cart", options)
+      .then((response) => {
+        return response
+      }).then((data)=> {
+        console.log(data);
+        this.$store.commit.clearCart
+        return data
+      })  
+    },
+    goToCart() {
+      // this.$router.push({
+      //   path: "/cart",
+      // });
+    },
+    goHome() {
+      // this.$router.push({
+      //   path: "/",
+      // });
     }
   },
 };

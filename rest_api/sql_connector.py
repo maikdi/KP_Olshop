@@ -29,7 +29,6 @@ class DB:
         select_statement = "SELECT * FROM users WHERE username = %s;"
         self.cursor.execute(select_statement, (username,))
         user = self.cursor.fetchall()
-        print(user)
         return user
     
     def get_all_products(self):
@@ -40,10 +39,94 @@ class DB:
         all_products = self.cursor.fetchall()
         return all_products #(id, name, price, kategori, deskripsi, path)
 
-    def add_to_cart(self, username, product_name, price, quantity):
-        insert_statement = f"INSERT INTO cart (username, product_name, price, quantity) VALUES ('{username}', '{product_name}', '{price}' ,'{quantity}')"
-        self.cursor.execute(insert_statement)
+    def search_invoice_duplicate_item(self, invoice_id, product_id):
+        select_statement = """
+        SELECT * FROM invoices
+        WHERE invoice_id = %s AND product_id = %s;
+        """
+        self.cursor.execute(select_statement, (invoice_id, product_id, ))
+        product = self.cursor.fetchall()
+        return product
+
+    def add_invoice(self, invoice_id, user_id, product_id):
+        item_in_invoice = self.search_invoice_duplicate_item(invoice_id, product_id)
+        if len(item_in_invoice) == 0:
+            insert_statement = """
+            INSERT INTO invoices 
+            (invoice_id, user_id, product_id, quantity)
+            VALUES (%s, %s, %s, 1);
+            """
+            self.cursor.execute(insert_statement, (invoice_id, user_id, product_id, ))
+
+        else:
+            update_statement = """
+            UPDATE invoices
+            SET quantity = quantity + 1
+            WHERE invoice_id = %s AND user_id = %s AND product_id = %s
+            """
+            self.cursor.execute(update_statement, (invoice_id, user_id, product_id, ))
         self.conn.commit()
+
+    def get_current_user_invoice(self, invoice_id):
+        select_statement = """
+        SELECT `product`.`name`, `product`.`price`, `product`.`path`, `invoices`.`quantity`,  `invoices`.`product_id`
+        FROM `invoices`
+        INNER JOIN `product` on `invoices`.`product_id` = `product`.`id`
+        WHERE `invoice_id` = %s
+        """
+        self.cursor.execute(select_statement, (invoice_id, ))
+        cart = self.cursor.fetchall()
+        return cart
+
+    def delete_item(self, invoice_id, product_id):
+        delete_statement = """
+        DELETE FROM `invoices` WHERE `invoice_id` = %s AND `product_id` = %s
+        """
+        self.cursor.execute(delete_statement, (invoice_id, product_id, ))
+        self.conn.commit()
+
+    def minus_quantity(self, invoice_id, product_id):
+        update_statement = """
+            UPDATE invoices
+            SET quantity = quantity - 1
+            WHERE invoice_id = %s AND product_id = %s
+            """
+        self.cursor.execute(update_statement, (invoice_id, product_id, ))
+        self.conn.commit()
+
+    def plus_quantity(self, invoice_id, product_id):
+        update_statement = """
+            UPDATE invoices
+            SET quantity = quantity + 1
+            WHERE invoice_id = %s AND product_id = %s
+            """
+        self.cursor.execute(update_statement, (invoice_id, product_id, ))
+        self.conn.commit()
+    def delete_invoice(self, invoice_id):
+        delete_statement = """
+        DELETE FROM `invoices` WHERE invoice_id = %s
+        """
+        self.cursor.execute(delete_statement, (invoice_id, ))
+        self.conn.commit()
+
+    def increase_user_invoice_id(self, user_id):
+        update_statement = """
+        UPDATE users
+        SET num_sales = num_sales + 1
+        WHERE id = %s
+        """
+        self.cursor.execute(update_statement, (user_id, ))
+        self.conn.commit()
+
+    def add_sales(self, invoice_id, total, date):
+        insert_statement = """
+            INSERT INTO sales 
+            (invoice_id, amount, date)
+            VALUES (%s, %s, %s);
+            """
+        self.cursor.execute(insert_statement, (invoice_id, total, date, ))
+        self.conn.commit()
+
 
     def add_product(self, name, price, category, description, path):
         insert_statement = f"INSERT INTO product (name, price, kategori, Deskripsi, path) VALUES ('{name}', '{price}', '{category}' ,'{description}', '{path}')"

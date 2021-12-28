@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     details: "",
-    allProducts: []
+    allProducts: [],
+    cart: [],
   },
   getters: {
     productDetails: (state) => (index) => { 
@@ -14,12 +15,21 @@ export default new Vuex.Store({
     },
     allProducts(state) {
       return state.products
+    },
+    getCart(state){
+      return state.cart
     }
   },
   mutations: {
     setProducts(state, products) {
       state.allProducts = products
-    }
+    },
+    addCart(state, product) {
+      state.cart.push(product)
+    },
+    clearCart(state){
+      state.cart = []
+    },
   },
   actions: {
     
