@@ -15,6 +15,11 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Keranjang</a>
+        </li>
+        </ul>
       </div>
       <!-- DIV FOR SEARCH BAR ONLY -->
       <div class="container-fluid">

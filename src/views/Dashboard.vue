@@ -141,9 +141,11 @@
                 }).format(product[2])
               }}
             </p>
-            <a
+          </div>
+            <div class="card-footer">
+              <a
               href="#"
-              class="btn btn-primary me-2 col-auto"
+              class="btn btn-primary me-5"
               data-bs-toggle="modal"
               data-bs-target="#exampleModal"
               v-on:click="toggleModal(product[0] - 1)"
@@ -157,7 +159,7 @@
               @click="addToCart(product)"
               >Add to cart</a
             >
-          </div>
+            </div>
         </div>
       </div>
     </div>
