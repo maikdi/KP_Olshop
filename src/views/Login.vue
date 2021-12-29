@@ -1,5 +1,5 @@
 <template>
-  <div class="login">
+  <div class="container-fluid">
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
       <symbol
         id="exclamation-triangle-fill"
@@ -93,18 +93,15 @@ export default {
       }).then((data) => {
         if (data.response == "User"){
           this.$session.set("user",this.credentials.username)
-          this.$router.push({
-                path: '/'
-            })
+          this.$emit("valid")
         }
         else if (data.response == "Not Valid"){
           this.valid = false
         } 
         else if (data.response == "Admin"){
           this.$session.set("admin",this.credentials.username)
-          this.$router.push({
-                path: '/admin'
-            })
+          this.$emit("valid")
+          
         }
       })
     }

@@ -1,5 +1,42 @@
 <template>
   <div class="justify-content-center">
+    <!-- Start Login Modal -->
+    <div
+      class="modal fade"
+      id="loginModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+      v-if="showModal"
+      @close="showModal = false"
+    >
+      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <Login v-on:valid="createInvoice"></Login>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Login MODAL -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
       <!-- DIV FOR LOGO AND TABS -->
       <div class="container-fluid">
@@ -46,7 +83,14 @@
               aria-current="page"
               href="#/cart"
               @click="createInvoice"
-              v-else
+              v-if="this.$session.has('user') "
+              >Keranjang</a
+            >
+            <a
+              class="btn btn-link nav-link active"
+              aria-current="page"
+               @click="toLogin" data-bs-toggle="modal" data-bs-target="#loginModal"
+              v-if="!this.$session.has('user') && !this.$session.has('admin')"
               >Keranjang</a
             >
           </li>
@@ -74,7 +118,7 @@
         </a>
       </div>
       <div v-else>
-        <a class="btn btn-outline-light" aria-current="page" @click="toLogin">
+        <a class="btn btn-outline-light" aria-current="page" @click="toLogin" data-bs-toggle="modal" data-bs-target="#loginModal">
           Login
         </a>
       </div>
@@ -83,18 +127,22 @@
 </template>
 
 <script>
+import Login from './views/Login.vue';
 export default {
+  components: { Login },
   name: "Navbar",
   data() {
     return {
       loginStatus: false,
       username: "",
       isAdmin: this.$session.has("admin"),
-      keyword: ""
+      keyword: "",
+      showModal : false
     };
   },
   created() {
     let status = this.$session.has("user");
+    this.showModal = true
     // console.log(status);
     if (status) {
       this.loginStatus = true;
@@ -108,21 +156,21 @@ export default {
   },
   methods: {
     toLogin: function () {
-      this.$router.push({
-        path: "/login",
-      });
+      this.showModal = true
     },
     logout: function () {
-      this.$session.clear();
-      this.$router.go(0);
+      this.$session.destroy();
       this.$router.push({
         path: "/",
       });
+      this.$router.go(0)
     },
     createInvoice: function () {
-      let data = {
+      if ( this.$session.has("user") ){
+        console.log("Create Invoice");
+        let data = {
         cart: this.$store.getters.getCart,
-        user: this.username,
+        user:  this.$session.get("user"),
       };
       let options = {
         method: "PUT",
@@ -133,13 +181,20 @@ export default {
       };
       fetch("http://localhost:5000/add-cart", options)
         .then((response) => {
+          console.log("Create Invoice");
           return response.json();
         })
         .then((data) => {
           console.log(data);
           this.$store.commit.clearCart;
+          this.$router.go(0);
           return data;
         });
+      } else if ( this.$session.has("admin") ){
+          this.$router.go(0)
+      } else {
+
+      }
     },
     goToCart() {
       // this.$router.push({

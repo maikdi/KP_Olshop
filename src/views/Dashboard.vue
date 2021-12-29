@@ -164,10 +164,15 @@ export default {
       products: "",
       details: "",
       showModal: false,
-      showDetails: false
+      showDetails: false,
     };
   },
   created() {
+    if (this.$session.has('admin')){
+      this.$router.push({
+        path : "/admin"
+      })
+    } 
     fetch("http://localhost:5000/get_dashboard")
       .then((response) => {
         // console.log(response);
@@ -176,6 +181,9 @@ export default {
       .then((data) => {
         this.products = data.data;
         this.$store.commit("setProducts", data.data);
+        if (this.$session.has("user")){
+          this.username = this.$session.get("user")
+        }
         // console.log(data);
         this.toggleModal(0);
       });
@@ -210,27 +218,6 @@ export default {
         .then((data) => {
           this.products = data.data;
         });
-    },
-    createInvoice: function() {
-      let data = {
-        cart : this.$store.getters.getCart,
-        user : this.username
-        }
-      let options = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
-      fetch("http://localhost:5000/add-cart", options)
-      .then((response) => {
-        return response.json()
-      }).then((data)=> {
-        console.log(data);
-        this.$store.commit.clearCart
-        return data
-      })  
     },
   },
 };

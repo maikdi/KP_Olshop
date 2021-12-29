@@ -334,7 +334,8 @@ export default {
         });
     },
     async checkout() {
-      if (this.products.length > 0) {
+      if (this.$session.has("user")){
+        if (this.products.length > 0) {
         this.showModal = true;
         await sleep(2000);
         var today = new Date();
@@ -377,6 +378,13 @@ export default {
             });
             this.$router.go(0);
           });
+      } else {
+        this.$router.push({
+              path: "/login",
+            });
+      }
+      } else {
+        
       }
     },
     cancelAllItems() {
