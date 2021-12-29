@@ -11,13 +11,14 @@
           id="start-date"
           name="start-date"
           class="form-control"
+          v-model="startDate"
         /></div>
         
         <div class="col"><label for="end-date" class="col-form-label">sampai </label></div>
-        <div class="col"><input type="date" id="end-date" name="end-date" class="form-control" />
+        <div class="col"><input type="date" id="end-date" name="end-date" class="form-control" v-model="endDate" />
         </div>
         <div class="col"></div>
-          <button type="submit" class="btn btn-outline-primary">Search</button>
+          <button type="submit" class="btn btn-outline-primary" @click="search">Search</button>
         </div>
       <div class="row row-cols-auto">
         <div class="col">
@@ -51,7 +52,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="sale in product_sales" :key=sale[0]>
+            <tr v-for="(sale, index) in product_sales" :key=index>
               <td>{{ sale[1] }}</td>
               <td>{{ sale[0] }}</td>
               <td>{{ sale[2] }}</td>
@@ -121,7 +122,35 @@ export default ({
     return {
       checked: false,
       sales: [],
-      product_sales: []
+      product_sales: [],
+      startDate: "",
+      endDate: "",
+    }
+  },
+  methods: {
+    search() {
+      let data = {
+        startDate : this.startDate,
+        endDate : this.endDate
+      }
+      let options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+      fetch("http://localhost:5000/search-sale", options)
+      .then((response) => {
+        // console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        this.sales = data.all_sales;
+        this.product_sales = data.all_product_sales;
+        console.log(this.sales);
+        // console.log(data);
+      });
     }
   },
   created() {

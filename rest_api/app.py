@@ -214,4 +214,56 @@ def get_sale_report():
 		}
 	return jsonify(data)
 
+@app.route("/search-product", methods=["POST"])
+def search_product():
+	keyword = request.get_json()
+	all_products = shop_database.search_product(keyword) #List of tuple e.g: [('id', 'name', 'price), ('id2', 'name2', 'price2'), ...]
+	data = {"data" : all_products}
+	return jsonify(data)
+
+
+@app.route("/search-sale", methods=["POST"])
+def search_sale():
+	json_data = request.get_json()
+	start_date = json_data['startDate']
+	end_date = json_data['endDate']
+	if ((start_date != "") and (end_date != "")):
+		all_sales = shop_database.get_sales_by_date(start_date, end_date)
+		all_product_sales = []
+		for sales in all_sales:
+			query = shop_database.get_invoices_by_id(sales[0])
+			all_product_sales.extend(query)
+		data = {
+			"all_sales" : all_sales,
+			"all_product_sales" : all_product_sales
+			}
+		return jsonify(data)
+	elif ((start_date == "") and (end_date != "")):
+		start_date = "0000-01-01"
+		all_sales = shop_database.get_sales_by_date(start_date, end_date)
+		all_product_sales = []
+		for sales in all_sales:
+			query = shop_database.get_invoices_by_id(sales[0])
+			all_product_sales.extend(query)
+		data = {
+			"all_sales" : all_sales,
+			"all_product_sales" : all_product_sales
+			}
+		return jsonify(data)
+
+	elif ((start_date != "") and (end_date == "")):
+		end_date = "9999-12-31"
+		all_sales = shop_database.get_sales_by_date(start_date, end_date)
+		all_product_sales = []
+		for sales in all_sales:
+			query = shop_database.get_invoices_by_id(sales[0])
+			all_product_sales.extend(query)
+		data = {
+			"all_sales" : all_sales,
+			"all_product_sales" : all_product_sales
+			}
+		return jsonify(data)
+	else:
+		return get_sale_report()
+
 app.run(debug=True)

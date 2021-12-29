@@ -176,3 +176,18 @@ class DB:
         self.cursor.execute(select_statement)
         sales = self.cursor.fetchall()
         return sales
+
+    def search_product(self, keyword):
+        select_statement = f"SELECT * FROM product WHERE `product`.`name` LIKE '%{keyword}%'"
+        self.cursor.execute(select_statement)
+        all_products = self.cursor.fetchall()
+        return all_products #(id, name, price, kategori, deskripsi, path)
+
+    def get_sales_by_date(self, start_date, end_date):
+        select_statement = """
+        SELECT * FROM sales
+        WHERE (date >= %s) AND (date <= %s)
+        """
+        self.cursor.execute(select_statement, (start_date, end_date,))
+        sales = self.cursor.fetchall()
+        return sales

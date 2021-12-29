@@ -99,7 +99,7 @@
       </div>
     </div>
     <!-- End Cart Modal -->
-    <Navbar class="row"></Navbar>
+    <Navbar class="row" v-on:search="search"></Navbar>
     <div class="row row-cols-4 row-cols-md-4 g-4">
       <div class="col" v-for="product in products" :key="product[0]">
         <div class="card border-dark mb-3 h-80">
@@ -195,6 +195,22 @@ export default {
         path: "/cart",
       });
     },
+    search(keyword) {
+      let options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(keyword),
+      };
+      fetch("http://localhost:5000/search-product", options)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          this.products = data.data;
+        });
+    },
     createInvoice: function() {
       let data = {
         cart : this.$store.getters.getCart,
@@ -209,7 +225,7 @@ export default {
       };
       fetch("http://localhost:5000/add-cart", options)
       .then((response) => {
-        return response
+        return response.json()
       }).then((data)=> {
         console.log(data);
         this.$store.commit.clearCart

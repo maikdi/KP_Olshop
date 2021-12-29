@@ -218,31 +218,34 @@
     </div>
     <!-- End New Product MODAL -->
     <Navbar></Navbar>
-    <form class="row row-cols-lg-auto g-3 align-items-center">
-      <div class="col-12">
-        <label class="visually-hidden" for="inlineFormInputGroupSearch"
-          >Search</label
-        >
-        <div class="input-group">
-          <div class="input-group-text">Keyword:</div>
-          <input
-            type="text"
-            class="form-control"
-            id="inlineFormInputGroupSearch"
-          />
+    <div class="container-fluid" style="margin-top: 10px">
+      <div class="row row-cols-auto">
+        <div class="col-2">
+          <div class="input-group">
+            <div class="input-group-text">Keyword:</div>
+            <input
+              type="text"
+              class="form-control"
+              id="inlineFormInputGroupSearch"
+              v-model="keyword"
+            />
+          </div>
+        </div>
+        <div class="col-2">
+          <button type="submit" class="btn btn-outline-primary" @click="search">
+            Search
+          </button>
         </div>
       </div>
-      <div class="col-12">
-        <button type="submit" class="btn btn-outline-primary">Search</button>
-      </div>
-    </form>
+    </div>
+
     <div style="margin: 10px">
       <button
         type="button"
         class="btn btn-primary btn-lg"
         data-bs-toggle="modal"
         data-bs-target="#addModal"
-        @click="showModal=true"
+        @click="showModal = true"
       >
         + Add Product
       </button>
@@ -391,6 +394,7 @@ export default {
         image_name: "",
       },
       editedIndex: 0,
+      keyword: "",
     };
   },
   methods: {
@@ -399,6 +403,23 @@ export default {
       this.showModal = true;
       this.editedIndex = index;
     },
+    search() {
+      let options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.keyword),
+      };
+      fetch("http://localhost:5000/search-product", options)
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data);
+          this.products = data.data;
+        });
+    },
     addProduct() {
       var fileInput = document.getElementById("newImage");
       let uploaded_img = fileInput.files[0];
@@ -406,12 +427,12 @@ export default {
       if (uploaded_img != undefined) {
         console.log(uploaded_img);
         var filename = fileInput.files[0].name;
-        this.newProduct.image_name = filename
+        this.newProduct.image_name = filename;
         formData.append("image_file", uploaded_img);
       } else {
         formData = "";
       }
-      let data = this.newProduct
+      let data = this.newProduct;
       let options = {
         method: "POST",
         headers: {
@@ -425,12 +446,12 @@ export default {
       };
       fetch("http://localhost:5000/add-product", options)
         .then((response) => {
-          return response;
+          return response.json();
         })
         .then((data) => {
           fetch("http://localhost:5000/update-image", image_options)
             .then((response) => {
-              return response;
+              return response.json();
             })
             .then((data) => {
               this.$router.go(0);
@@ -484,7 +505,7 @@ export default {
       };
       fetch("http://localhost:5000/update-product", options)
         .then((response) => {
-          return response;
+          return response.json();
         })
         .then((data) => {
           fetch("http://localhost:5000/update-image", image_options)

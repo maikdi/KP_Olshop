@@ -54,15 +54,14 @@
       </div>
       <!-- DIV FOR SEARCH BAR ONLY -->
       <div class="container-fluid" v-if="!isAdmin">
-        <form class="d-flex">
           <input
             class="form-control me-2 col-auto"
             type="search"
             placeholder="Search"
             aria-label="Search"
+            v-model="keyword"
           />
-          <button class="btn btn-outline-light" type="submit">Search</button>
-        </form>
+          <button class="btn btn-outline-light" type="submit" @click="$emit('search', keyword)">Search</button>
       </div>
       <!-- DIV FOR USER SECTION -->
       <div class="container-fluid"></div>
@@ -91,6 +90,7 @@ export default {
       loginStatus: false,
       username: "",
       isAdmin: this.$session.has("admin"),
+      keyword: ""
     };
   },
   created() {
@@ -133,7 +133,7 @@ export default {
       };
       fetch("http://localhost:5000/add-cart", options)
         .then((response) => {
-          return response;
+          return response.json();
         })
         .then((data) => {
           console.log(data);
