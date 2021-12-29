@@ -1,61 +1,157 @@
 <template>
   <div>
     <Navbar></Navbar>
-    <div>
-      <form class="row row-cols-lg-auto g-3 align-items-center">
-        <label for="start-date">Tgl: </label>
-        <input type="date" id="start-date" name="start-date" />
-        <label for="end-date">sampai </label>
-        <input type="date" id="end-date" name="end-date" />
-        <div class="col-12">
+    <div class="container-fluid" style="margin-top:10px">
+      <div class="row row-cols-auto">
+        <div class="col">
+          <label for="start-date" class="col-form-label">Tgl: </label>
+        </div>
+        <div class="col"><input
+          type="date"
+          id="start-date"
+          name="start-date"
+          class="form-control"
+        /></div>
+        
+        <div class="col"><label for="end-date" class="col-form-label">sampai </label></div>
+        <div class="col"><input type="date" id="end-date" name="end-date" class="form-control" />
+        </div>
+        <div class="col"></div>
           <button type="submit" class="btn btn-outline-primary">Search</button>
         </div>
-        <div class="form-check">
-          <input
+      <div class="row row-cols-auto">
+        <div class="col">
+          <label class="form-check-label" for="flexCheckDefault">
+            <input
             class="form-check-input"
             type="checkbox"
-            value=""
+            v-model="checked"
             id="flexCheckDefault"
           />
-          <label class="form-check-label" for="flexCheckDefault">
             By Product Only
           </label>
         </div>
-      </form>
+      </div>
     </div>
     <div class="row" style="margin: 10px">
       <div class="col-md-12">
-        <table class="table table-bordered">
+        <!-- Table by product only -->
+        <table class="table table-bordered" v-if="checked">
           <caption>
             Viewing 1 of 1 Item(s)
           </caption>
           <thead>
             <tr>
-              <th>No.</th>
-              <th>Id</th>
-              <th>Nama</th>
-              <th>Harga</th>
+              <th>Invoice ID</th>
+              <th>Tanggal</th>
+              <th>Nama Produk</th>
+              <th>Kuantitas</th>
+              <th>Harga per Produk</th>
+              <th>Subtotal</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>1</td>
-              <td>Iphone XXX_cH41215_hUlU_XXX</td>
-              <td>Rp. 1.000.000</td>
+            <tr v-for="sale in product_sales" :key=sale[0]>
+              <td>{{ sale[1] }}</td>
+              <td>{{ sale[0] }}</td>
+              <td>{{ sale[2] }}</td>
+              <td>{{ sale[3] }}</td>
+              <td>{{ new Intl.NumberFormat("in-IN", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(sale[4]) }}</td>
+              <td>{{ new Intl.NumberFormat("in-IN", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(sale[3] * sale[4] )}}</td>
             </tr>
           </tbody>
-		  <tfoot>
-			  <tr>
-				<td colspan="2"></td>
-				<td><b>Total</b></td>
-			  </tr>
- 		 </tfoot>
+          <tfoot>
+            <tr>
+              <td colspan="2"></td>
+              <td colspan="2"></td>
+              <td class="table-active"><b>Total</b></td>
+              <td class="table-active"><b>{{ calculateTotal }}</b></td>
+            </tr>
+          </tfoot>
+        </table>
+        <!-- Table by invoice only -->
+        <table class="table table-bordered" v-else>
+          <caption>
+            Viewing 1 of 1 Item(s)
+          </caption>
+          <thead>
+            <tr>
+              <th>Sales ID</th>
+              <th>Tanggal</th>
+              <th>Invoice ID</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="sale in sales" :key=sale[0]>
+              <td class="align-middle">{{ sale[0] }}</td>
+              <td class="align-middle">{{ sale[3] }}</td>
+              <td class="align-middle">{{ sale[1] }}</td>
+              <td class="align-middle">{{
+                    new Intl.NumberFormat("in-IN", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(sale[2])
+                  }}</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="2"></td>
+              <td class="table-active"><b>Total</b></td>
+              <td class="table-active"><b>{{ calculateTotal }}</b></td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+
+export default ({
+  data() {
+    return {
+      checked: false,
+      sales: [],
+      product_sales: []
+    }
+  },
+  created() {
+    fetch("http://localhost:5000/get-sale-report")
+      .then((response) => {
+        // console.log(response);
+        return response.json();
+      })
+      .then((data) => {
+        this.sales = data.all_sales;
+        this.product_sales = data.all_product_sales;
+        // console.log(data);
+      });
+  },
+  computed: {
+    calculateTotal() {
+      let amount = 0;
+      this.sales.forEach((sale) => {
+        amount += sale[2];
+      });
+      let total = new Intl.NumberFormat("in-IN", {
+        style: "currency",
+        currency: "IDR",
+      }).format(amount);
+      // document.getElementById("total").innerHTML = total;
+      return total;
+    }
+  }
+})
+</script>
 
 <style scoped>
 /* * {

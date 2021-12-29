@@ -17,15 +17,43 @@
         </button>
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#/" @click="goHome">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#/cart" @click="createInvoice">Keranjang</a>
-        </li>
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href="#/admin"
+              v-if="isAdmin"
+              >Products</a
+            >
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href="#/"
+              @click="goHome"
+              v-else
+              >Home</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href="#/sale-report"
+              v-if="isAdmin"
+              >Sales Report</a
+            >
+            <a
+              class="nav-link active"
+              aria-current="page"
+              href="#/cart"
+              @click="createInvoice"
+              v-else
+              >Keranjang</a
+            >
+          </li>
         </ul>
       </div>
       <!-- DIV FOR SEARCH BAR ONLY -->
-      <div class="container-fluid">
+      <div class="container-fluid" v-if="!isAdmin">
         <form class="d-flex">
           <input
             class="form-control me-2 col-auto"
@@ -39,16 +67,18 @@
       <!-- DIV FOR USER SECTION -->
       <div class="container-fluid"></div>
       <div class="d-flex" v-if="loginStatus">
-          <a class="btn btn-outline-light me-2 col-auto" aria-current="page">
-            {{ this.username }}
-          </a>
-          <a class="btn btn-outline-light" aria-current="page" @click="logout"> Logout </a>
+        <a class="btn btn-outline-light me-2 col-auto" aria-current="page">
+          {{ this.username }}
+        </a>
+        <a class="btn btn-outline-light" aria-current="page" @click="logout">
+          Logout
+        </a>
       </div>
       <div v-else>
-          <a class="btn btn-outline-light" aria-current="page" @click="toLogin">
-            Login
-          </a>
-        </div>
+        <a class="btn btn-outline-light" aria-current="page" @click="toLogin">
+          Login
+        </a>
+      </div>
     </nav>
   </div>
 </template>
@@ -60,6 +90,7 @@ export default {
     return {
       loginStatus: false,
       username: "",
+      isAdmin: this.$session.has("admin"),
     };
   },
   created() {
@@ -68,8 +99,7 @@ export default {
     if (status) {
       this.loginStatus = true;
       this.username = this.$session.get("user");
-    }
-    else if (this.$session.has("admin")){
+    } else if (this.$session.has("admin")) {
       this.loginStatus = true;
       this.username = this.$session.get("admin");
     } else {
@@ -82,18 +112,18 @@ export default {
         path: "/login",
       });
     },
-    logout: function() {
-      this.$session.clear()
-      this.$router.go(0)
+    logout: function () {
+      this.$session.clear();
+      this.$router.go(0);
       this.$router.push({
         path: "/",
       });
     },
-    createInvoice: function() {
+    createInvoice: function () {
       let data = {
-        cart : this.$store.getters.getCart,
-        user : this.username
-        }
+        cart: this.$store.getters.getCart,
+        user: this.username,
+      };
       let options = {
         method: "PUT",
         headers: {
@@ -102,13 +132,14 @@ export default {
         body: JSON.stringify(data),
       };
       fetch("http://localhost:5000/add-cart", options)
-      .then((response) => {
-        return response
-      }).then((data)=> {
-        console.log(data);
-        this.$store.commit.clearCart
-        return data
-      })  
+        .then((response) => {
+          return response;
+        })
+        .then((data) => {
+          console.log(data);
+          this.$store.commit.clearCart;
+          return data;
+        });
     },
     goToCart() {
       // this.$router.push({
@@ -119,7 +150,7 @@ export default {
       // this.$router.push({
       //   path: "/",
       // });
-    }
+    },
   },
 };
 </script>

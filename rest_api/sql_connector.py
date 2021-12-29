@@ -156,3 +156,23 @@ class DB:
         insert_statement = f"INSERT INTO product (name, price, kategori, Deskripsi, path) VALUES ('{name}', '{price}', '{category}' ,'{description}', '{path}')"
         self.cursor.execute(insert_statement)
         self.conn.commit()
+    
+    def get_invoices_by_id(self, sales_id):
+        select_statement = """
+        SELECT `sales`.`date`,  `invoices`.`invoice_id`, `product`.`name`, `invoices`.`quantity` , `product`.`price` 
+        FROM `sales`
+        INNER JOIN `invoices` on `invoices`.`invoice_id` = `sales`.`invoice_id`
+        INNER JOIN `product` on `invoices`.`product_id` = `product`.`id`
+        WHERE `sales`.`sales_id` = %s
+        """
+        self.cursor.execute(select_statement, (sales_id, ))
+        sales = self.cursor.fetchall()
+        return sales
+
+    def get_sales(self):
+        select_statement = """
+        SELECT * FROM sales
+        """
+        self.cursor.execute(select_statement)
+        sales = self.cursor.fetchall()
+        return sales

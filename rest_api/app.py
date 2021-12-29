@@ -201,4 +201,17 @@ def add_product():
 	data = {"Response" : "OK"}
 	return jsonify(data)
 
+@app.route("/get-sale-report", methods=["GET"])
+def get_sale_report():
+	all_sales = shop_database.get_sales()
+	all_product_sales = []
+	for sales in all_sales:
+		query = shop_database.get_invoices_by_id(sales[0])
+		all_product_sales.extend(query)
+	data = {
+		"all_sales" : all_sales,
+		"all_product_sales" : all_product_sales
+		}
+	return jsonify(data)
+
 app.run(debug=True)
