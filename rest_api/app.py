@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
 from sql_connector import DB
 from flask_cors import CORS
-
+import os
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = '../src/assets/'
 CORS(app)
 shop_database = DB()
 
@@ -16,17 +17,24 @@ def login():
 	username = json_data["username"]
 	password = json_data["password"]
 	get_user = shop_database.select_id_pass(username, password)
+	get_admin = shop_database.select_from_admin(username, password)
 	# print(username)
 	if len(get_user) == 0:
-		response = {
-			"response" : "Not Valid"
-		}
-		return jsonify(response)
+		if len(get_admin) == 0:
+			response = {
+				"response" : "Not Valid"
+			}
+			return jsonify(response)
+		else:
+			# session['role'] = get_user[0][2]
+			response = {
+				"response" : "Admin"
+			}
+			return jsonify(response)
 	else:
-		# session['role'] = get_user[0][2]
 		response = {
-			"response" : "Valid"
-		}
+				"response" : "User"
+			}
 		return jsonify(response)
 
 @app.route('/sign-up', methods=['POST'])
@@ -144,8 +152,53 @@ def cancel_all():
 	data = {"Response" : "OK"}
 	return jsonify(data)
 
-@app.route('/admin', methods=["POST"])
+@app.route("/update-product", methods=["POST"])
+def update_product():
+	json_data = request.get_json()
+	data = json_data['data']
+	prod_id = data[0]
+	new_name = data[1]
+	new_price = data[2]
+	new_category = data[3]
+	new_desc = data[4]
+	new_img_path = data[5]
+	shop_database.update_product(prod_id, new_name, new_price, new_category, new_desc, new_img_path)
+	data = {"Response" : "OK"}
+	return jsonify(data)
+
+@app.route("/update-image", methods=["POST"])
+def update_image():
+	try:
+		print("Image Uploaded")
+		image = request.files['image_file']
+		img_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+		image.save(img_path)
+	except:
+		print("Upload Fail")
+		pass
+
+	data = {"Response" : "OK"}
+	return jsonify(data)
+
+@app.route("/delete-product", methods=["POST"])
+def delete_product():
+	json_data = request.get_json()
+	product_id = json_data['data']
+	shop_database.delete_product(product_id)
+	data = {"Response" : "OK"}
+	return jsonify(data)
+
+@app.route('/add-product', methods=["POST"])
 def add_product():
-	pass
+	data = request.get_json()
+	new_name = data['name']
+	new_price = data['price']
+	new_category = data['category']
+	new_desc = data['description']
+	new_img_path = data['image_name']
+	print(new_img_path)
+	shop_database.add_product(new_name, new_price, new_category, new_desc, new_img_path)
+	data = {"Response" : "OK"}
+	return jsonify(data)
 
 app.run(debug=True)

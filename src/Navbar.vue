@@ -55,7 +55,7 @@
 
 <script>
 export default {
-  name: "Welcome",
+  name: "Navbar",
   data() {
     return {
       loginStatus: false,
@@ -68,6 +68,10 @@ export default {
     if (status) {
       this.loginStatus = true;
       this.username = this.$session.get("user");
+    }
+    else if (this.$session.has("admin")){
+      this.loginStatus = true;
+      this.username = this.$session.get("admin");
     } else {
       this.loginStatus = false;
     }
@@ -81,6 +85,9 @@ export default {
     logout: function() {
       this.$session.clear()
       this.$router.go(0)
+      this.$router.push({
+        path: "/",
+      });
     },
     createInvoice: function() {
       let data = {

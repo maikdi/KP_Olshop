@@ -20,6 +20,15 @@ class DB:
         user = self.cursor.fetchall()
         return user
 
+    def select_from_admin(self, username, password):
+        select_statement = """
+        SELECT * FROM admins
+        WHERE username = %s AND password = %s;
+        """
+        self.cursor.execute(select_statement, (username, password,))
+        user = self.cursor.fetchall()
+        return user
+
     def insert_user(self, first_name, last_name, username, password):
         insert_statement = f"INSERT INTO users (first_name, last_name, username, password) VALUES ('{first_name}', '{last_name}', '{username}' ,'{password}')"
         self.cursor.execute(insert_statement)
@@ -109,6 +118,13 @@ class DB:
         self.cursor.execute(delete_statement, (invoice_id, ))
         self.conn.commit()
 
+    def delete_product(self, product_id):
+        delete_statement = """
+        DELETE FROM `product` WHERE id = %s
+        """
+        self.cursor.execute(delete_statement, (product_id, ))
+        self.conn.commit()
+
     def increase_user_invoice_id(self, user_id):
         update_statement = """
         UPDATE users
@@ -127,6 +143,14 @@ class DB:
         self.cursor.execute(insert_statement, (invoice_id, total, date, ))
         self.conn.commit()
 
+    def update_product(self, id, name, price, category, description, path):
+        update_statement = """
+        UPDATE product
+        SET name = %s, price = %s, kategori = %s, Deskripsi = %s, path = %s
+        WHERE product.id = %s
+        """
+        self.cursor.execute(update_statement, (name, price, category, description, path, id, F))
+        self.conn.commit()
 
     def add_product(self, name, price, category, description, path):
         insert_statement = f"INSERT INTO product (name, price, kategori, Deskripsi, path) VALUES ('{name}', '{price}', '{category}' ,'{description}', '{path}')"

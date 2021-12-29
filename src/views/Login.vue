@@ -91,7 +91,7 @@ export default {
         console.log(response);
         return response.json();
       }).then((data) => {
-        if (data.response == "Valid"){
+        if (data.response == "User"){
           this.$session.set("user",this.credentials.username)
           this.$router.push({
                 path: '/'
@@ -100,6 +100,12 @@ export default {
         else if (data.response == "Not Valid"){
           this.valid = false
         } 
+        else if (data.response == "Admin"){
+          this.$session.set("admin",this.credentials.username)
+          this.$router.push({
+                path: '/admin'
+            })
+        }
       })
     }
   }
