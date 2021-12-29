@@ -13,9 +13,7 @@
       <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="cartSuccess">
-              Checkout berhasil!
-            </h5>
+            <h5 class="modal-title" id="cartSuccess">Checkout berhasil!</h5>
             <button
               type="button"
               class="btn-close"
@@ -42,6 +40,29 @@
       <div id="parent-left" class="col-9 gx-3 gy-3">
         <div class="overflow-hidden p-4 border bg-light">
           <h5>Keranjang</h5>
+          <button
+            type="button"
+            class="btn btn-outline-danger"
+            @click="cancelAllItems"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-trash"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"
+              ></path>
+              <path
+                fill-rule="evenodd"
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"
+              ></path>
+            </svg>
+            Cancel All
+          </button>
           <ul class="list-group list-group-flush">
             <li
               class="list-group-item"
@@ -55,7 +76,6 @@
                       :src="require('../assets/' + product[2])"
                       alt=""
                       style="width: 48px"
-                      class="rounded"
                     />
                   </div>
 
@@ -157,8 +177,24 @@
             <small id="total"></small>
           </div>
           <div class="row centered">
-            <button type="button" class="btn btn-success" @click="checkout" data-bs-toggle="modal"
-              data-bs-target="#checkoutModal">Checkout</button>
+            <button
+              type="button"
+              class="btn btn-success"
+              @click="checkout"
+              data-bs-toggle="modal"
+              data-bs-target="#checkoutModal"
+              v-if="products.length > 0"
+            >
+              Checkout
+            </button>
+            <button
+              type="button"
+              class="btn btn-success"
+              v-else
+              disabled
+            >
+              Checkout
+            </button>
           </div>
         </div>
       </div>
@@ -168,14 +204,14 @@
 
 <script>
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 export default {
   name: "Cart",
   data() {
     return {
       products: [],
-      showModal: true
+      showModal: true,
     };
   },
   computed: {},
@@ -199,6 +235,7 @@ export default {
       .then((data) => {
         this.products = data.data;
         this.calculateTotal();
+        console.log(this.products);
       });
   },
   methods: {
@@ -212,7 +249,7 @@ export default {
         currency: "IDR",
       }).format(amount);
       document.getElementById("total").innerHTML = total;
-      return amount
+      return amount;
     },
     addToCart(product) {
       console.log(product);
@@ -297,18 +334,54 @@ export default {
         });
     },
     async checkout() {
-      this.showModal = true
-      await sleep(2000)
-      var today = new Date();
-      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      var dateTime = date+' '+time;
-      let total = this.calculateTotal()
-      console.log(total);
+      if (this.products.length > 0) {
+        this.showModal = true;
+        await sleep(2000);
+        var today = new Date();
+        var date =
+          today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate();
+        var time =
+          today.getHours() +
+          ":" +
+          today.getMinutes() +
+          ":" +
+          today.getSeconds();
+        var dateTime = date + " " + time;
+        let total = this.calculateTotal();
+        console.log(total);
+        let data = {
+          user: this.$session.get("user"),
+          total: total,
+          date: dateTime,
+        };
+        let options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        };
+        fetch("http://localhost:5000/checkout", options)
+          .then((response) => {
+            // console.log(response);
+            return response.json();
+          })
+          .then((data) => {
+            this.showModal = false;
+            this.$router.push({
+              path: "/",
+            });
+            this.$router.go(0);
+          });
+      }
+    },
+    cancelAllItems() {
       let data = {
         user: this.$session.get("user"),
-        total: total,
-        date: dateTime
       };
       let options = {
         method: "POST",
@@ -317,19 +390,17 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch("http://localhost:5000/checkout", options)
+      fetch("http://localhost:5000/cancel-all", options)
         .then((response) => {
           // console.log(response);
           return response.json();
         })
         .then((data) => {
-          this.showModal = false
-          this.$router.push({
-          path: "/",
+          this.products = [];
+          this.calculateTotal();
+          return data;
         });
-          this.$router.go(0)
-        });
-    }
+    },
   },
 };
 </script>

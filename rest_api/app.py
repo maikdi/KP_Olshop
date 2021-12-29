@@ -134,6 +134,16 @@ def checkout():
 	data = {"Response" : "OK"}
 	return jsonify(data)
 
+@app.route("/cancel-all" , methods=["POST"])
+def cancel_all():	
+	json_data = request.get_json()
+	user = json_data['user']
+	user = shop_database.find_username(user)[0]
+	invoice_id = user[1] + "_" + str(user[-1])
+	shop_database.delete_invoice(invoice_id)
+	data = {"Response" : "OK"}
+	return jsonify(data)
+
 @app.route('/admin', methods=["POST"])
 def add_product():
 	pass
