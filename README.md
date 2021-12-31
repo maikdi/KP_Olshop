@@ -27,7 +27,7 @@ So, as a result this app is able to send emails based on these events:
 #### Setting up additional feature.
 * Celery. 
 Celery should be installed when installing from requirements.txt
-
+* * It is recommended to use Linux environment when using Celery
 * redis-server
 You will need a redis-server to work with the celery. If you do not have one yet. Download it here https://redis.io/download
 
