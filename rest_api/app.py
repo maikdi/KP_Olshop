@@ -11,9 +11,9 @@ app.config['SECRET_KEY'] = 'IBDA3211-Sistem Terdistribusi-Michael-191900564'
 # Flask-Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'mhanitio64@students.calvin.ac.id'
-app.config['MAIL_PASSWORD'] = 'mhanitio64'
-app.config['MAIL_DEFAULT_SENDER'] = 'mhanitio64@students.calvin.ac.id'
+app.config['MAIL_USERNAME'] = 'INSERT VALID EMAIL HERE'
+app.config['MAIL_PASSWORD'] = 'INSER VALID PASSWORD HERE'
+app.config['MAIL_DEFAULT_SENDER'] = 'INSERT ANOTHER VALID EMAIL HERE'
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 # Celery configuration
