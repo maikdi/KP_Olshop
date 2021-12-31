@@ -29,8 +29,8 @@ class DB:
         user = self.cursor.fetchall()
         return user
 
-    def insert_user(self, first_name, last_name, username, password):
-        insert_statement = f"INSERT INTO users (first_name, last_name, username, password) VALUES ('{first_name}', '{last_name}', '{username}' ,'{password}')"
+    def insert_user(self, first_name, last_name, username, password, email):
+        insert_statement = f"INSERT INTO users (first_name, last_name, username, password, email) VALUES ('{first_name}', '{last_name}', '{username}' ,'{password}' , '{email}')"
         self.cursor.execute(insert_statement)
         self.conn.commit()
         

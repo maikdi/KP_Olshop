@@ -93,10 +93,11 @@ def sign_up():
 	last_name = json_data['last_name']
 	username = json_data['username']
 	password = json_data['password']
+	email = json_data['email']
 
 	if (username and password != ""): 
 		if len(shop_database.find_username(username)) == 0:
-			shop_database.insert_user(first_name, last_name, username, password)
+			shop_database.insert_user(first_name, last_name, username, password, email)
 			result = {
 				'data': {
 					'first name': first_name,

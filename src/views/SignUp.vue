@@ -97,6 +97,14 @@
             <div class="invalid-feedback">Please choose a username.</div>
           </div>
           <div class="mt-2">
+            <label class="form-label">Email</label>
+            <input
+              type="password"
+              class="form-control"
+              v-model="credentials.email"
+            />
+          </div>
+          <div class="mt-2">
             <label class="form-label">Password</label>
             <input
               type="password"
@@ -131,6 +139,7 @@ export default {
         last_name: "",
         username: "",
         password: "",
+        email: ""
       },
       status: null,
     };
