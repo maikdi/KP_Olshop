@@ -18,6 +18,13 @@ pip install -r requirements.txt
 ```
 <hr>
 
+### Additional Features!
+This project is also a joint project with Distributed System lecture <br>
+So, as a result this app is able to send emails based on these events:
+* Whenever a user checksout (Email will be sent to admin)
+* Whenever admin adds a new product, all users will be informed
+
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve

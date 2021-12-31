@@ -149,7 +149,7 @@ class DB:
         SET name = %s, price = %s, kategori = %s, Deskripsi = %s, path = %s
         WHERE product.id = %s
         """
-        self.cursor.execute(update_statement, (name, price, category, description, path, id, F))
+        self.cursor.execute(update_statement, (name, price, category, description, path, id,))
         self.conn.commit()
 
     def add_product(self, name, price, category, description, path):
@@ -182,6 +182,23 @@ class DB:
         self.cursor.execute(select_statement)
         all_products = self.cursor.fetchall()
         return all_products #(id, name, price, kategori, deskripsi, path)
+
+    def get_user_email_by_username(self, username):
+        select_statement = """
+        SELECT email FROM users
+        WHERE id = %s
+        """
+        self.cursor.execute(select_statement, (username,))
+        email = self.cursor.fetchall()
+        return email
+
+    def get_all_user_email(self):
+        select_statement = """
+        SELECT email FROM users
+        """
+        self.cursor.execute(select_statement)
+        emails = self.cursor.fetchall()
+        return emails
 
     def get_sales_by_date(self, start_date, end_date):
         select_statement = """

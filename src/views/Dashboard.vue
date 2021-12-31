@@ -175,7 +175,7 @@ export default {
         path : "/admin"
       })
     } 
-    fetch("http://localhost:5000/get_dashboard")
+    fetch("http://127.0.0.1:5000/get_dashboard")
       .then((response) => {
         // console.log(response);
         return response.json();
