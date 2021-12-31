@@ -55,9 +55,9 @@
 
       <div class="d-flex justify-content-center mt-3">
         <div class="small d-inline text-center" style="margin-right: 3px">Don't have an account?</div>
-        <router-link to='/sign-up' class="small d-inline text-center text-decoration-none">
+        <a href="#/sign-up" class="small d-inline text-center text-decoration-none">
           <b>Sign Up</b>
-        </router-link>
+        </a>
       </div>
     </div>
     </div>
