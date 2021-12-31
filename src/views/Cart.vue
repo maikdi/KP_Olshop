@@ -187,12 +187,7 @@
             >
               Checkout
             </button>
-            <button
-              type="button"
-              class="btn btn-success"
-              v-else
-              disabled
-            >
+            <button type="button" class="btn btn-success" v-else disabled>
               Checkout
             </button>
           </div>
@@ -334,57 +329,75 @@ export default {
         });
     },
     async checkout() {
-      if (this.$session.has("user")){
+      if (this.$session.has("user")) {
         if (this.products.length > 0) {
-        this.showModal = true;
-        await sleep(2000);
-        var today = new Date();
-        var date =
-          today.getFullYear() +
-          "-" +
-          (today.getMonth() + 1) +
-          "-" +
-          today.getDate();
-        var time =
-          today.getHours() +
-          ":" +
-          today.getMinutes() +
-          ":" +
-          today.getSeconds();
-        var dateTime = date + " " + time;
-        let total = this.calculateTotal();
-        console.log(total);
-        let data = {
-          user: this.$session.get("user"),
-          total: total,
-          date: dateTime,
-        };
-        let options = {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        };
-        fetch("http://localhost:5000/checkout", options)
-          .then((response) => {
-            // console.log(response);
-            return response.json();
-          })
-          .then((data) => {
-            this.showModal = false;
-            this.$router.push({
-              path: "/",
+          this.showModal = true;
+          await sleep(2000);
+          var today = new Date();
+          var date =
+            today.getFullYear() +
+            "-" +
+            (today.getMonth() + 1) +
+            "-" +
+            today.getDate();
+          var time =
+            today.getHours() +
+            ":" +
+            today.getMinutes() +
+            ":" +
+            today.getSeconds();
+          var dateTime = date + " " + time;
+          let total = this.calculateTotal();
+          console.log(total);
+          let data = {
+            user: this.$session.get("user"),
+            total: total,
+            date: dateTime,
+          };
+          let options = {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          };
+          fetch("http://localhost:5000/checkout", options)
+            .then((response) => {
+              // console.log(response);
+              return response.json();
+            })
+            .then((data) => {
+              let email_data = {
+                subject: "Incoming Invoice",
+                to: this.$session.get("user"),
+                body: "Pesanan masuk !",
+              };
+              let email_options = {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(email_data),
+              };
+              fetch("http://localhost:5000/send_mail", email_options)
+                .then((response) => {
+                  // console.log(response);
+                  return response.json();
+                })
+                .then((data) => {
+                  this.showModal = false;
+                  this.$router.push({
+                    path: "/",
+                  });
+                  this.$router.go(0);
+                });
             });
-            this.$router.go(0);
+        } else {
+          this.$router.push({
+            path: "/login",
           });
+        }
       } else {
-        this.$router.push({
-              path: "/login",
-            });
-      }
-      } else {
-        
       }
     },
     cancelAllItems() {

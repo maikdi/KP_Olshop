@@ -456,7 +456,26 @@ export default {
               return response.json();
             })
             .then((data) => {
-              this.$router.go(0);
+              let email_data = {
+                subject: "Produk Baru",
+                to: "all",
+                body: "Pengguna, ada sebuah produk baru. Silahkan dilihat!",
+              };
+              let email_options = {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(email_data),
+              };
+              fetch("http://localhost:5000/send_mail", email_options)
+                .then((response) => {
+                  // console.log(response);
+                  return response.json();
+                })
+                .then((data) => {
+                  this.$router.go(0);
+                });              
             });
         });
     },

@@ -1,15 +1,64 @@
 from flask import Flask, request, jsonify
+from flask_mail import Mail, Message
+from celery import Celery
 from sql_connector import DB
 from flask_cors import CORS
 import os
+
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = '../src/assets/'
+app.config['SECRET_KEY'] = 'IBDA3211-Sistem Terdistribusi-Michael-191900564'
+# Flask-Mail configuration
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'mhanitio64@students.calvin.ac.id'
+app.config['MAIL_PASSWORD'] = 'mhanitio64'
+app.config['MAIL_DEFAULT_SENDER'] = 'mhanitio64@students.calvin.ac.id'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+# Celery configuration
+app.config['CELERY_BROKER_URL'] = 'redis://localhost:6379/0'
+app.config['CELERY_RESULT_BACKEND'] = 'redis://localhost:6379/0'
+
 CORS(app)
 shop_database = DB()
 
-# @app.route("/", methods=["POST"])
-# def add_to_cart():
-# 	pass
+# Initialize extensions
+mail = Mail(app)
+
+celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+celery.conf.update(app.config)
+
+
+@celery.task
+def send_async_email(email_data):
+    msg = Message(email_data["subject"], sender=app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[email_data['to']])
+    msg.body = email_data['body']
+    mail.send(msg)
+    return "Async Email Sending Success"
+
+@app.route('/send_mail', methods=["POST"])
+def send_mail():
+	email_data = request.get_json()	
+	receiver = email_data['to']
+	if receiver == "all":
+		all_receiver = shop_database.get_all_user_email()
+		for receivers in all_receiver:
+			message = {
+				"subject" : email_data['subject'],
+				"to" : 	receivers[0],
+				"body" : email_data['body']
+			}
+			send_async_email(message)
+	else:
+		message = {
+				"subject" : email_data['subject'],
+				"to" : 	shop_database.get_user_email_by_username(receiver),
+				"body" : email_data['body']
+			}
+		send_async_email(message)
+	return "Email delivered"
 
 @app.route("/login", methods=["POST"])
 def login():
