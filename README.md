@@ -50,10 +50,6 @@ python3 -m venv venv
 py app.py
 ```
 * In antoher terminal run the redis-server
-* In another terminal (yes, this is the fourth terminal you must open) run
-```
-celery -A tasks worker -E --loglevel=INFO
-```
 <hr>
 
 ### Compiles and hot-reloads for development
