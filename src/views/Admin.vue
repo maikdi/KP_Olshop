@@ -474,8 +474,8 @@ export default {
                   return response.json();
                 })
                 .then((data) => {
-                  this.$router.go(0);
-                });              
+                });       
+              this.$router.go(0);       
             });
         });
     },
