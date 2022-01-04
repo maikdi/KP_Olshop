@@ -32,13 +32,11 @@ celery.conf.update(app.config)
 
 @celery.task
 def send_async_email(email_data):
-	print("went here")
-	msg = Message(email_data["subject"], sender=app.config['MAIL_DEFAULT_SENDER'],
-					recipients=[email_data['to']])
-	msg.body = email_data['body']
-	with app.app_context():
-		mail.send(msg)
-	return "Async Email Sending Success"
+    msg = Message(email_data["subject"], sender=app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[email_data['to']])
+    msg.body = email_data['body']
+    mail.send(msg)
+    return "Async Email Sending Success"
 
 @app.route('/send_mail', methods=["POST"])
 def send_mail():
@@ -54,7 +52,7 @@ def send_mail():
 				"to" : 	receivers[0],
 				"body" : email_data['body'],
 			}
-			send_async_email.delay(message)
+			send_async_email(message)
 	else:
 		message = {
 				"subject" : email_data['subject'],
@@ -62,7 +60,7 @@ def send_mail():
 				"body" : email_data['body']
 			}
 		print(message['to'])
-		send_async_email.delay(message)
+		send_async_email(message)
 	return "Email delivered"
 
 @app.route("/login", methods=["POST"])
