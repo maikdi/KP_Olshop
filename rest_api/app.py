@@ -41,22 +41,25 @@ def send_async_email(email_data):
 @app.route('/send_mail', methods=["POST"])
 def send_mail():
 	email_data = request.get_json()	
+	print(email_data)
 	receiver = email_data['to']
 	if receiver == "all":
 		all_receiver = shop_database.get_all_user_email()
 		for receivers in all_receiver:
+			print(receivers[0])
 			message = {
 				"subject" : email_data['subject'],
 				"to" : 	receivers[0],
-				"body" : email_data['body']
+				"body" : email_data['body'],
 			}
 			send_async_email(message)
 	else:
 		message = {
 				"subject" : email_data['subject'],
-				"to" : 	shop_database.get_user_email_by_username(receiver),
+				"to" : 	shop_database.get_user_email_by_username(receiver)[0][0],
 				"body" : email_data['body']
 			}
+		print(message['to'])
 		send_async_email(message)
 	return "Email delivered"
 

@@ -186,7 +186,7 @@ class DB:
     def get_user_email_by_username(self, username):
         select_statement = """
         SELECT email FROM users
-        WHERE id = %s
+        WHERE username = %s
         """
         self.cursor.execute(select_statement, (username,))
         email = self.cursor.fetchall()

@@ -369,7 +369,7 @@ export default {
             .then((data) => {
               let email_data = {
                 subject: "Incoming Invoice",
-                to: this.$session.get("user"),
+                to: this.$session.get("user") ,
                 body: "Pesanan masuk !",
               };
               let email_options = {
@@ -385,12 +385,13 @@ export default {
                   return response.json();
                 })
                 .then((data) => {
-                  this.showModal = false;
+                  
+                });
+                this.showModal = false;
                   this.$router.push({
                     path: "/",
                   });
                   this.$router.go(0);
-                });
             });
         } else {
           this.$router.push({
