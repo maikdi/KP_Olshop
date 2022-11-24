@@ -1,12 +1,15 @@
-import mysql.connector
+import mysql.connector, os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class DB:
     def __init__(self):
         dbconfig = {
             'host': 'localhost',
-            'user': 'root',
-            'password': '',
-            'database': 'uas_web'
+            'user': str(os.environ.get('DB_USERNAME')),
+            'password': str(os.environ.get('DB_PASSWORD')),
+            'database': str(os.environ.get('DB_DATABSE'))
         }
         self.conn = mysql.connector.connect(**dbconfig)
         self.cursor = self.conn.cursor()

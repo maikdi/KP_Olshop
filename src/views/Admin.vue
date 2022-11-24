@@ -279,7 +279,7 @@
               <td style="width: 50px">{{ product[0] }}</td>
               <td style="width: 100px" :id="'image' + product[0]">
                 <img
-                  :src="require('../assets/' + product[5])"
+                  :src="'https://' + product[5]"
                   class="card-img-top"
                   style="height: 64px"
                 />

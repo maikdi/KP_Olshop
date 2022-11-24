@@ -99,7 +99,7 @@
           <div class="mt-2">
             <label class="form-label">Email</label>
             <input
-              type="password"
+              type="text"
               class="form-control"
               v-model="credentials.email"
             />
@@ -128,7 +128,6 @@
     </div>
   </div>
 </template>
-
 <script>
 export default {
   name: "Registration",
@@ -144,6 +143,17 @@ export default {
       status: null,
     };
   },
+  mounted() {
+    if (localStorage.getItem('reloaded')) {
+        // The page was just reloaded. Clear the value from local storage
+        // so that it will reload the next time this page is visited.
+        localStorage.removeItem('reloaded');
+    } else {
+        // Set a flag so that we know not to reload the page twice.
+        localStorage.setItem('reloaded', '1');
+        location.reload();
+    }
+    },
   methods: {
     signUp() {
       let options = {

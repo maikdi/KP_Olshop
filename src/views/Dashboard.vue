@@ -25,8 +25,7 @@
             <div class="row">
               <div class="col">
                 <img
-                  :src="require('../assets/' + details[5])"
-                  alt=""
+                  :src="'https://' + details[5]"
                   style="width: 240px"
                 />
               </div>
@@ -104,7 +103,7 @@
       <div class="col" v-for="product in products" :key="product[0]">
         <div class="card border-dark mb-3 h-80">
           <img
-            :src="require('../assets/' + product[5])"
+            :src="'https://' + product[5]"
             class="card-img-top"
             style="height: 300px"
           />
