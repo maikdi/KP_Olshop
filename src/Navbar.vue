@@ -189,7 +189,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + ":5000/" + "add-cart", options)
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "add-cart", options)
         .then((response) => {
           console.log("Create Invoice");
           return response.json();

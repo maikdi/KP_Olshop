@@ -163,7 +163,7 @@ export default {
         },
         body: JSON.stringify(this.credentials),
       };
-      fetch(process.env.API_URL + ":5000/" + "sign-up", options)
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "sign-up", options)
         .then((response) => {
           return response.json();
         })

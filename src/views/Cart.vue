@@ -222,7 +222,7 @@ export default {
       },
       body: JSON.stringify(data),
     };
-    fetch(process.env.API_URL + ":5000/" + "get-cart", options)
+    fetch(process.env.VUE_APP_API_URL + ":5000/" + "get-cart", options)
       .then((response) => {
         // console.log(response);
         return response.json();
@@ -262,7 +262,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + ":5000/" + "cancel-item", options)
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "cancel-item", options)
         .then((response) => {
           // console.log(response);
           return response.json();
@@ -286,7 +286,7 @@ export default {
           },
           body: JSON.stringify(data),
         };
-        fetch(process.env.API_URL + ":5000/" + "minus-quantity", options)
+        fetch(process.env.VUE_APP_API_URL + ":5000/" + "minus-quantity", options)
           .then((response) => {
             // console.log(response);
             return response.json();
@@ -314,7 +314,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + ":5000/" + "plus-quantity", options)
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "plus-quantity", options)
         .then((response) => {
           // console.log(response);
           return response.json();
@@ -361,7 +361,7 @@ export default {
             },
             body: JSON.stringify(data),
           };
-          fetch(process.env.API_URL + ":5000/" + "checkout", options)
+          fetch(process.env.VUE_APP_API_URL + ":5000/" + "checkout", options)
             .then((response) => {
               // console.log(response);
               return response.json();
@@ -379,7 +379,7 @@ export default {
                 },
                 body: JSON.stringify(email_data),
               };
-              fetch(process.env.API_URL + ":5000/" + "send_mail", email_options)
+              fetch(process.env.VUE_APP_API_URL + ":5000/" + "send_mail", email_options)
                 .then((response) => {
                   // console.log(response);
                   return response.json();
@@ -412,7 +412,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + ":5000/" + "cancel-all", options)
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "cancel-all", options)
         .then((response) => {
           // console.log(response);
           return response.json();

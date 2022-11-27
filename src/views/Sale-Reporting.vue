@@ -142,7 +142,7 @@ export default ({
         },
         body: JSON.stringify(data),
       }
-      fetch(process.env.API_URL + ":5000/" + "search-sale", options)
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "search-sale", options)
       .then((response) => {
         // console.log(response);
         return response.json();
@@ -156,7 +156,7 @@ export default ({
     }
   },
   created() {
-    fetch(process.env.API_URL + ":5000/" + "get-sale-report")
+    fetch(process.env.VUE_APP_API_URL + ":5000/" + "get-sale-report")
       .then((response) => {
         // console.log(response);
         return response.json();

@@ -413,7 +413,7 @@ export default {
         },
         body: JSON.stringify(this.keyword),
       };
-      fetch(process.env.API_URL+ ":5000/" + "search-product", options)
+      fetch(process.env.VUE_APP_API_URL+ ":5000/" + "search-product", options)
         .then((response) => {
           return response.json();
         })
@@ -446,12 +446,12 @@ export default {
         method: "POST",
         body: formData,
       };
-      fetch(process.env.API_URL + ":5000/" + "add-product", options)
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "add-product", options)
         .then((response) => {
           return response.json();
         })
         .then((data) => {
-          fetch(process.env.API_URL + ":5000/" + "update-image", image_options)
+          fetch(process.env.VUE_APP_API_URL + ":5000/" + "update-image", image_options)
             .then((response) => {
               return response.json();
             })
@@ -468,7 +468,7 @@ export default {
                 },
                 body: JSON.stringify(email_data),
               };
-              fetch(process.env.API_URL + ":5000/" + "send_mail", email_options)
+              fetch(process.env.VUE_APP_API_URL + ":5000/" + "send_mail", email_options)
                 .then((response) => {
                   // console.log(response);
                   return response.json();
@@ -494,7 +494,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + ":5000/" + "delete-product", options);
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "delete-product", options);
     },
     saveProduct() {
       var fileInput = document.getElementById("upload");
@@ -524,12 +524,12 @@ export default {
         method: "POST",
         body: formData,
       };
-      fetch(process.env.API_URL + ":5000/" + "update-product", options)
+      fetch(process.env.VUE_APP_API_URL + ":5000/" + "update-product", options)
         .then((response) => {
           return response.json();
         })
         .then((data) => {
-          fetch(process.env.API_URL + ":5000/" + "update-image", image_options)
+          fetch(process.env.VUE_APP_API_URL + ":5000/" + "update-image", image_options)
             .then((response) => {
               return response;
             })
@@ -540,7 +540,7 @@ export default {
     },
   },
   created() {
-    fetch(process.env.API_URL + ":5000/" + "get_dashboard")
+    fetch(process.env.VUE_APP_API_URL + ":5000/" + "get_dashboard")
       .then((response) => {
         // console.log(response);
         return response.json();
