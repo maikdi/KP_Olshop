@@ -6,7 +6,7 @@ load_dotenv()
 class DB:
     def __init__(self):
         dbconfig = {
-            'host': 'localhost',
+            'host': str(os.environ.get('DB_HOST')),
             'user': str(os.environ.get('DB_USERNAME')),
             'password': str(os.environ.get('DB_PASSWORD')),
             'database': str(os.environ.get('DB_DATABSE'))
