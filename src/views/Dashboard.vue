@@ -174,7 +174,7 @@ export default {
         path : "/admin"
       })
     } 
-    fetch(String(process.env.API_URL) + ":5000/" + "get_dashboard")
+    fetch(process.env.API_URL + ":5000/" + "get_dashboard")
       .then((response) => {
         // console.log(response);
         return response.json();
@@ -212,7 +212,7 @@ export default {
         },
         body: JSON.stringify(keyword),
       };
-      fetch(String(process.env.API_URL) + ":5000/" + "search-product", options)
+      fetch(process.env.API_URL + ":5000/" + "search-product", options)
         .then((response) => {
           return response.json();
         })
