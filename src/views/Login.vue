@@ -86,7 +86,7 @@ export default {
         body: JSON.stringify(this.credentials),
       };
       console.log(this.credentials);
-      fetch("http://localhost:5000/login", options)
+      fetch(process.env.API_URL + "login", options)
       .then((response) => {
         console.log(response);
         return response.json();

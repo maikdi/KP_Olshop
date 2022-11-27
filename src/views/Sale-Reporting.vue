@@ -142,7 +142,7 @@ export default ({
         },
         body: JSON.stringify(data),
       }
-      fetch("http://localhost:5000/search-sale", options)
+      fetch(process.env.API_URL + "search-sale", options)
       .then((response) => {
         // console.log(response);
         return response.json();
@@ -156,7 +156,7 @@ export default ({
     }
   },
   created() {
-    fetch("http://localhost:5000/get-sale-report")
+    fetch(process.env.API_URL + "get-sale-report")
       .then((response) => {
         // console.log(response);
         return response.json();

@@ -163,7 +163,7 @@ export default {
         },
         body: JSON.stringify(this.credentials),
       };
-      fetch("http://localhost:5000/sign-up", options)
+      fetch(process.env.API_URL + "sign-up", options)
         .then((response) => {
           return response.json();
         })
