@@ -367,4 +367,5 @@ def search_sale():
     else:
         return get_sale_report()
 
-app.run(debug=True)
+if __name__ == '__main__':
+    app.run()
