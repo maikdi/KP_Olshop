@@ -222,7 +222,7 @@ export default {
       },
       body: JSON.stringify(data),
     };
-    fetch(process.env.API_URL + "get-cart", options)
+    fetch(String(process.env.API_URL) + "get-cart", options)
       .then((response) => {
         // console.log(response);
         return response.json();
@@ -262,7 +262,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + "cancel-item", options)
+      fetch(String(process.env.API_URL) + "cancel-item", options)
         .then((response) => {
           // console.log(response);
           return response.json();
@@ -286,7 +286,7 @@ export default {
           },
           body: JSON.stringify(data),
         };
-        fetch(process.env.API_URL + "minus-quantity", options)
+        fetch(String(process.env.API_URL) + "minus-quantity", options)
           .then((response) => {
             // console.log(response);
             return response.json();
@@ -314,7 +314,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + "plus-quantity", options)
+      fetch(String(process.env.API_URL) + "plus-quantity", options)
         .then((response) => {
           // console.log(response);
           return response.json();
@@ -361,7 +361,7 @@ export default {
             },
             body: JSON.stringify(data),
           };
-          fetch(process.env.API_URL + "checkout", options)
+          fetch(String(process.env.API_URL) + "checkout", options)
             .then((response) => {
               // console.log(response);
               return response.json();
@@ -379,7 +379,7 @@ export default {
                 },
                 body: JSON.stringify(email_data),
               };
-              fetch(process.env.API_URL + "send_mail", email_options)
+              fetch(String(process.env.API_URL) + "send_mail", email_options)
                 .then((response) => {
                   // console.log(response);
                   return response.json();
@@ -412,7 +412,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + "cancel-all", options)
+      fetch(String(process.env.API_URL) + "cancel-all", options)
         .then((response) => {
           // console.log(response);
           return response.json();

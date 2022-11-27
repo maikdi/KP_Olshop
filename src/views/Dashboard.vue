@@ -174,7 +174,7 @@ export default {
         path : "/admin"
       })
     } 
-    fetch(process.env.API_URL + "get_dashboard")
+    fetch(String(process.env.API_URL) + "get_dashboard")
       .then((response) => {
         // console.log(response);
         return response.json();
@@ -212,7 +212,7 @@ export default {
         },
         body: JSON.stringify(keyword),
       };
-      fetch(process.env.API_URL + "search-product", options)
+      fetch(String(process.env.API_URL) + "search-product", options)
         .then((response) => {
           return response.json();
         })

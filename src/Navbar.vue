@@ -189,7 +189,7 @@ export default {
         },
         body: JSON.stringify(data),
       };
-      fetch(process.env.API_URL + "add-cart", options)
+      fetch(String(process.env.API_URL) + "add-cart", options)
         .then((response) => {
           console.log("Create Invoice");
           return response.json();

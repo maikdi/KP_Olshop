@@ -86,7 +86,7 @@ export default {
         body: JSON.stringify(this.credentials),
       };
       console.log(this.credentials);
-      fetch(process.env.API_URL + "login", options)
+      fetch(String(process.env.API_URL) + "login", options)
       .then((response) => {
         console.log(response);
         return response.json();

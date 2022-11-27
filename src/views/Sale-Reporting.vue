@@ -142,7 +142,7 @@ export default ({
         },
         body: JSON.stringify(data),
       }
-      fetch(process.env.API_URL + "search-sale", options)
+      fetch(String(process.env.API_URL) + "search-sale", options)
       .then((response) => {
         // console.log(response);
         return response.json();
@@ -156,7 +156,7 @@ export default ({
     }
   },
   created() {
-    fetch(process.env.API_URL + "get-sale-report")
+    fetch(String(process.env.API_URL) + "get-sale-report")
       .then((response) => {
         // console.log(response);
         return response.json();
